@@ -17,11 +17,13 @@ export default (req, res, next) =>{
         req.userId = decoded._id;
 
         next();
-    }catch (e){
-        return res.status(403).json({
-            message : 'No access',
-        });
-    }
+
+        }catch (e){
+            return res.status(403).json({
+                message : 'No access',
+            });
+        }
+        
     }else{
         return res.status(403).json({
             message : 'No access',
