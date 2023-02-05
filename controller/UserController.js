@@ -1,4 +1,3 @@
-import {validationResult} from "express-validator";
 import bcrypt from "bcrypt";
 import UserModel from "../models/User.js";
 import jwt from "jsonwebtoken";
@@ -8,12 +7,6 @@ export const register = async (req, res)=>
     //after getting request, we will check it by parsing it
 
     try {
-        //by validationResult we are checking for errors(empty/not empty)
-        const errors = validationResult(req);
-
-        if(!errors.isEmpty()){
-            return res.status(400).json(errors.array());
-        }
 
         //to get password from request into variable password
         const password = req.body.password;

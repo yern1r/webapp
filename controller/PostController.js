@@ -53,6 +53,31 @@ export const getOne = async (req, res) => {
         });
     }
 };
+
+export const create = async (req , res) => {
+    try {
+        const doc = new PostModel({
+            title: req.body.title,
+            text: req.body.text,
+            imageUrl: req.body.imageUrl,
+            tags: req.body.tags,
+            user: req.userId,
+        });
+
+        //after doc is ready we are creating it
+
+        const post = await doc.save();
+
+        res.json(post);
+
+    }catch (err){
+        console.log(err);
+        res.status(500).json({
+            message: 'Failed to create article',
+        });
+    }
+};
+
 export const remove = async (req, res) => {
     try{
         const postId = req.params.id;
@@ -89,26 +114,30 @@ export const remove = async (req, res) => {
     }
 };
 
-export const create = async (req , res) => {
+export const update = async (req , res) => {
     try {
-        const doc = new PostModel({
-           title: req.body.title,
-           text: req.body.title,
-           imageUrl: req.body.imageUrl,
-            tags: req.body.tags,
-            user: req.userId,
+        const postId = req.params.id;
+
+        await PostModel.updateOne({
+                _id: postId,
+            },
+            {
+                title: req.body.title,
+                text: req.body.text,
+                tags: req.body.tags,
+                imageUrl: req.body.imageUrl,
+                user: req.userId,
+            });
+
+        res.json({
+            message: 'successfully updated'
         });
-
-        //after doc is ready we are creating it
-
-        const post = await doc.save();
-
-        res.json(post);
-
-    }catch (err){
-        console.log(err);
-        res.status(500).json({
-            message: 'Failed to create article',
-        });
+    } catch (err) {
+        if (err){
+            console.log(err);
+            return res.status(500).json({
+                message: 'Failed to update article',
+            });
+        }
     }
 };
